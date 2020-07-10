@@ -1,6 +1,7 @@
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
 // import { useState } from "react";
 import { useForm } from 'react-hook-form'
+import Input from './Input'
 // import apiClient from '../utils/apiClient'
 // import { AxiosError } from 'axios'
 
@@ -110,115 +111,25 @@ const CheckoutForm = () => {
     <form className="w-full max-w-lg m-auto" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full px-3">
-          <label
-            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-            htmlFor="grid-name"
-          >
-            Name on card
-          </label>
-          <input
-            ref={register({ required: true })}
-            name="name"
-            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-            id="grid-name"
+          <Input
             type="text"
+            label="Name on card"
+            name="name"
+            isError={errors.name}
             placeholder="Jane Smith"
+            register={register({ required: true })}
           />
-          {errors.name && (
-            <p className="text-red-500 text-xs italic">
-              Please fill out this field.
-            </p>
-          )}
         </div>
       </div>
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full px-3">
-          <label
-            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-            htmlFor="grid-email"
-          >
-            Email
-          </label>
-          <input
-            ref={register({ required: true })}
-            name="email"
-            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-            id="grid-email"
+          <Input
             type="email"
-          />
-          {errors.email && (
-            <p className="text-red-500 text-xs italic">
-              Please fill out this field.
-            </p>
-          )}
-        </div>
-      </div>
-      <div className="flex flex-wrap -mx-3 mb-6">
-        <div className="w-full px-3 mb-3">
-          <label
-            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-            htmlFor="grid-address"
-          >
-            <span>Address</span>
-            <span className="lowercase tracking-wide text-gray-700 text-xs font-normal ml-2 mb-2">
-              (Optional)
-            </span>
-          </label>
-          <input
-            ref={register}
-            name="street"
-            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id="grid-street"
-            type="text"
-            placeholder="123 elm st"
-          />
-        </div>
-        <div className="w-full md:w-1/2 px-3 mb-6 md:mb-3">
-          <label
-            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-            htmlFor="grid-city"
-          >
-            City
-          </label>
-          <input
-            ref={register}
-            name="city"
-            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id="grid-city"
-            type="text"
-            placeholder="Albuquerque"
-          />
-        </div>
-        <div className="w-full md:w-1/6 px-3 mb-6 md:mb-3">
-          <label
-            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-            htmlFor="grid-state"
-          >
-            State
-          </label>
-          <input
-            ref={register({ maxLength: 2, minLength: 2 })}
-            name="state"
-            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id="grid-state"
-            type="text"
-            placeholder="NY"
-          />
-        </div>
-        <div className="w-full md:w-1/3 px-3 mb-6 md:mb-3">
-          <label
-            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-            htmlFor="grid-zip"
-          >
-            Zip
-          </label>
-          <input
-            ref={register({ maxLength: 6, minLength: 6 })}
-            name="zip"
-            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id="grid-zip"
-            type="text"
-            placeholder="90210"
+            label="Email"
+            name="email"
+            isError={errors.email}
+            placeholder="jane.smith@offering.com"
+            register={register({ required: true })}
           />
         </div>
       </div>
