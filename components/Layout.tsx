@@ -37,34 +37,13 @@ const Layout = ({
             </a>
           </Link>
           <h1>
-            <span className="light">Stripe Sample</span>
+            <span className="light">Offering</span>
             <br />
-            Next.js, TypeScript, and Stripe 🔒💸
+            Give Tithe
           </h1>
         </div>
       </header>
       {children}
-    </div>
-    <div className="banner">
-      <span>
-        This is a{' '}
-        <a
-          href="https://github.com/stripe-samples"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Stripe Sample
-        </a>
-        .{' View code on '}
-        <a
-          href="https://github.com/vercel/next.js/tree/canary/examples/with-stripe-typescript"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          GitHub
-        </a>
-        .
-      </span>
     </div>
   </>
 )
