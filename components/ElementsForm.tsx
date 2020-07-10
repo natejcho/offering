@@ -8,68 +8,7 @@ import { fetchPostJSON } from '../utils/api-helpers'
 import { formatAmountForDisplay } from '../utils/stripe-helpers'
 import * as config from '../config'
 
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
-
-const CARD_OPTIONS = {
-  iconStyle: 'solid' as const,
-  style: {
-    base: {
-      iconColor: '#6772e5',
-      color: '#6772e5',
-      fontWeight: '500',
-      fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
-      fontSize: '16px',
-      fontSmoothing: 'antialiased',
-      ':-webkit-autofill': {
-        color: '#fce883',
-      },
-      '::placeholder': {
-        color: '#6772e5',
-      },
-    },
-    invalid: {
-      iconColor: '#ef2961',
-      color: '#ef2961',
-    },
-  },
-}
-
 const ElementsForm = () => {
-  const [input, setInput] = useState({
-    customDonation: Math.round(config.MAX_AMOUNT / config.AMOUNT_STEP),
-    cardholderName: '',
-  })
-  const [payment, setPayment] = useState({ status: 'initial' })
-  const [errorMessage, setErrorMessage] = useState('')
-  const stripe = useStripe()
-  const elements = useElements()
-
-  const PaymentStatus = ({ status }: { status: string }) => {
-    switch (status) {
-      case 'processing':
-      case 'requires_payment_method':
-      case 'requires_confirmation':
-        return <h2>Processing...</h2>
-
-      case 'requires_action':
-        return <h2>Authenticating...</h2>
-
-      case 'succeeded':
-        return <h2>Payment Succeeded 🥳</h2>
-
-      case 'error':
-        return (
-          <>
-            <h2>Error 😭</h2>
-            <p className="error-message">{errorMessage}</p>
-          </>
-        )
-
-      default:
-        return null
-    }
-  }
-
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
     setInput({
       ...input,
