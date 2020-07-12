@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form'
 import Input from './Input'
 import { formatAmountForDisplay } from '../utils/stripe-helpers'
 import * as config from '../config'
-import apiClient from '../utils/apiClient';
-import { fetchPostJSON } from '../utils/api-helpers';
+import apiClient from '../utils/apiClient'
+import { fetchPostJSON } from '../utils/api-helpers'
 
 interface FormData {
   amount: number
@@ -21,12 +21,10 @@ const CheckoutForm = () => {
     setLoading(true)
     // Create a Checkout Session.
     try {
-
       const response = await fetchPostJSON('/api/checkout_sessions', {
         amount: data.amount,
       })
       // const response = await apiClient.post<FormData>('/api/checkout_sessions');
-
 
       if (response.status === 500) {
         console.error(response.message)
@@ -50,7 +48,7 @@ const CheckoutForm = () => {
         console.warn(err.response)
       }
 
-      throw err;
+      throw err
     }
     setLoading(false)
   }
@@ -65,7 +63,12 @@ const CheckoutForm = () => {
             name="amount"
             isError={errors.amount}
             placeholder="10.00"
-            register={register({ required: true, min: config.MIN_AMOUNT, max: config.MAX_AMOUNT, pattern: config.CURRENCY_FORMAT_REGEX })}
+            register={register({
+              required: true,
+              min: config.MIN_AMOUNT,
+              max: config.MAX_AMOUNT,
+              pattern: config.CURRENCY_FORMAT_REGEX,
+            })}
           />
         </div>
       </div>

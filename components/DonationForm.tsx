@@ -16,18 +16,18 @@ const CheckoutForm = () => {
   // const [isLoading, setLoading] = useState(false);
 
   const stripe = useStripe()
-  const elements = useElements();
+  const elements = useElements()
 
   const onSubmit = async (data) => {
     const verifyCard = await stripe?.createPaymentMethod({
-      type: "card",
+      type: 'card',
       card: elements.getElement(CardElement),
-      'billing_details': {
+      billing_details: {
         email: data.email,
-        name: data.name
-      }
+        name: data.name,
+      },
     })
-    console.log(verifyCard);
+    console.log(verifyCard)
     // setLoading(true);
     // const result = await stripe.createPaymentMethod({
     //   type: "card",

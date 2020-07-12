@@ -6,7 +6,7 @@ import CheckoutForm from '../components/CheckoutForm'
 
 const IndexPage: NextPage = () => {
   return (
-    <Layout title="Home | Next.js + TypeScript Example">
+    <Layout>
       <ul className="card-list">
         <li>
           <CheckoutForm />
