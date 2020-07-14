@@ -1,24 +1,23 @@
 import Link from 'next/link'
-import { useState } from 'react'
-import { fetchGetJSON } from '../utils/api-helpers'
+import { useMemo } from 'react'
+import { useRouter } from 'next/router'
+import { useUser } from '../firebase/userContext'
 
 interface Props {
   title: string
 }
 
 const Header = ({ title }: Props) => {
-  const [disabled, setDisabled] = useState(false)
+  const router = useRouter()
+  // Our custom hook to get context values
+  const { loadingUser, user, logout } = useUser()
+  const isLoggedIn = useMemo(() => user != null, [user])
+  const isDisabled = useMemo(() => loadingUser, [loadingUser])
 
   const handleLogin = async () => {
-    setDisabled(true)
-
-    const data = await fetchGetJSON('/api/stripe/get-oauth-link')
-    if (data.url) {
-      window.location = data.url
-    } else {
-      setDisabled(false)
-      // elmButton.textContent = "<Something went wrong>";
-      console.log('data', data)
+    if (isLoggedIn) logout()
+    else {
+      router.push('/login')
     }
   }
 
@@ -38,10 +37,10 @@ const Header = ({ title }: Props) => {
       <div className="w-full block lg:flex lg:items-center lg:w-auto">
         <button
           className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
-          disabled={disabled}
           onClick={handleLogin}
+          disabled={isDisabled}
         >
-          login
+          {isLoggedIn ? 'logout' : 'login'}
         </button>
       </div>
     </header>

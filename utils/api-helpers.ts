@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-unfetch'
+import cookie from 'cookie'
 
 // TODO: delete
 export async function fetchGetJSON(url: string) {
@@ -32,6 +33,10 @@ export async function fetchPostJSON(url: string, data?: {}) {
   }
 }
 
+export function parseCookies(req) {
+  return cookie.parse(req ? req.headers.cookie || '' : document.cookie)
+}
+
 // TODO: memoize
 /**
  * Obtains URI based on deployment of application
@@ -41,7 +46,7 @@ export async function fetchPostJSON(url: string, data?: {}) {
  * @param {Object} context Data fetching context parameter
  *    passed through from NextJs data fetching method
  */
-export function get_URI(context) {
+export function getURI(context) {
   const {
     req: {
       headers: {

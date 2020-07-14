@@ -26,11 +26,9 @@
   "dependencies": {
     "@stripe/react-stripe-js": "1.1.2",
     "@stripe/stripe-js": "1.5.0",
-    "axios": "^0.19.2",
     "classnames": "^2.2.6",
-    "dotenv": "latest",
+    "cookie": "^0.4.1",
     "firebase": "^7.16.0",
-    "firebase-admin": "^8.13.0",
     "isomorphic-unfetch": "^3.0.0",
     "js-cookie": "^2.2.1",
     "micro": "^9.3.4",
@@ -45,6 +43,7 @@
     "use-shopping-cart": "2.1.0"
   },
   "devDependencies": {
+    "@types/cookie": "^0.4.0",
     "@types/micro": "^7.3.3",
     "@types/micro-cors": "^0.1.0",
     "@types/node": "^13.9.5",

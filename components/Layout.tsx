@@ -1,11 +1,6 @@
 import React, { ReactNode } from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
 import Header from './Header'
-
-import { useEffect } from 'react'
-import { useUser } from '../firebase/userContext'
-import firebase from '../firebase/clientApp'
 
 type Props = {
   children: ReactNode
@@ -13,18 +8,6 @@ type Props = {
 }
 
 const Layout = ({ children, title = 'Give Tithe' }: Props) => {
-  // Our custom hook to get context values
-  const { loadingUser, user } = useUser()
-
-  useEffect(() => {
-    if (!loadingUser) {
-      // You know that the user is loaded: either logged in or out!
-      // console.log(user)
-    }
-    // You also have your firebase app initialized
-    // console.log(firebase)
-  }, [loadingUser, user])
-
   return (
     <>
       <Head>

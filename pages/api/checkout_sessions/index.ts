@@ -22,6 +22,7 @@ export default async function handler(
       }
       // Create Checkout Sessions from body params.
       const params: Stripe.Checkout.SessionCreateParams = {
+        /* eslint-disable  @typescript-eslint/camelcase */
         submit_type: 'donate',
         payment_method_types: ['card'],
         line_items: [

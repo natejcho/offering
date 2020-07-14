@@ -3,9 +3,8 @@ import React, { useState } from 'react'
 import getStripe from '../utils/get-stripejs'
 import { useForm } from 'react-hook-form'
 import Input from './Input'
-import { formatAmountForDisplay } from '../utils/stripe-helpers'
+// import { formatAmountForDisplay } from '../utils/stripe-helpers'
 import * as config from '../config'
-import apiClient from '../utils/apiClient'
 import { fetchPostJSON } from '../utils/api-helpers'
 
 interface FormData {
@@ -13,7 +12,12 @@ interface FormData {
 }
 
 const CheckoutForm = () => {
-  const { register, handleSubmit, watch, errors } = useForm<FormData>()
+  const {
+    register,
+    handleSubmit,
+    // watch,
+    errors,
+  } = useForm<FormData>()
 
   const [loading, setLoading] = useState(false)
 
@@ -33,6 +37,7 @@ const CheckoutForm = () => {
 
       // Redirect to Checkout.
       const stripe = await getStripe()
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const { error } = await stripe!.redirectToCheckout({
         // Make the id field from the Checkout Session creation API response
         // available to this file, so you can provide it as parameter here

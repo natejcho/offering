@@ -1,15 +1,9 @@
-/* globals window */
 import { useEffect, useState } from 'react'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import firebase from '../firebase/clientApp'
-import 'firebase/auth'
-import Cookies from 'js-cookie'
 import Router from 'next/router'
-// import initFirebase from '../utils/auth/initFirebase'
-// import { fetchGetJSON } from '../utils/api-helpers'
+import firebase, { init } from '../firebase'
 
-// Init the Firebase app.
-// initFirebase()
+init()
 
 const firebaseAuthConfig = {
   signInFlow: 'popup',
@@ -24,19 +18,13 @@ const firebaseAuthConfig = {
   signInSuccessUrl: '/',
   credentialHelper: 'none',
   callbacks: {
-    signInSuccessWithAuthResult: async ({ user }, redirectUrl) => {
+    signInSuccessWithAuthResult: async ({ user }) => {
       // xa is the access token, which can be retrieved through
       // firebase.auth().currentUser.getIdToken()
-      const { uid, email, xa } = user
+      //TODO: handle firebase signups bc this will be null;
+      console.log(user)
+      const { uid } = user
       if (uid) {
-        const userData = {
-          id: uid,
-          email,
-          token: xa,
-        }
-        Cookies.set('auth', userData, {
-          expires: 3,
-        })
         Router.push('/auth?' + new URLSearchParams({ uid }).toString())
         return false
       }

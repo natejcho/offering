@@ -1,105 +1,76 @@
 import { GetServerSidePropsContext } from 'next'
-import Router from 'next/router'
-// TODO: make clientapp.ts index
-import { fetchGetJSON, fetchPostJSON, get_URI } from '../utils/api-helpers'
-import Cookies from 'js-cookie'
+import {
+  fetchGetJSON,
+  fetchPostJSON,
+  getURI,
+  parseCookies,
+} from '../utils/api-helpers'
 import { ParsedUrlQuery } from 'querystring'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 
 interface StripeRedirectQuery extends ParsedUrlQuery {
   code: string
-  uid: string
 }
 
 const Auth = () => {
-  // const router = useRouter()
-
-  // useEffect(() => {
-  //   // TODO: this was done client side, since we need the cookies
-  //   console.log(Cookies.get('auth'))
-  //   debugger;
-  //   const uid = Cookies.get('auth')?.id
-  //   if (uid) {
-  //     // const { code } = router.query as StripeRedirectQuery
-  //     if (!router.query.code) {
-  //       fetchGetJSON(
-  //         '/api/stripe/get-oauth-link?' +
-  //         new URLSearchParams({ uid }).toString()
-  //       ).then((data) => {
-  //         if (data.url) {
-  //           window.location = data.url
-  //         }
-  //       })
-  //     } else {
-  //       // if coming from stripe redirect after signing up, need to persist the stripeId into firebase
-  //       try {
-  //         fetchPostJSON('/api/stripe/authorize-oauth', {
-  //           ...router.query,
-  //           uid,
-  //         }).then((response) => {
-  //           if (response.status !== 200) {
-  //             console.warn(response.message)
-  //           }
-  //         })
-  //       } catch (err) {
-  //         if (err && err.response) {
-  //           console.warn(err.response)
-  //         }
-  //       }
-  //     }
-  //   }
-  //   // redirect home if users manually requested this route
-  //   const redirect = '/'
-  //   Router.replace(redirect)
-  // }, [])
   return
 }
 
 export default Auth
 
-export const getServerSideProps: void = async (
-  ctx: GetServerSidePropsContext
-) => {
-  // console.log(Cookies.get('auth'));
-  // const uid = Cookies.get('auth')?.id
-  // TODO: steal parse cookie method from voterpackage
-  const { code, uid } = ctx.query as StripeRedirectQuery
-  console.log(ctx.query)
-  if (uid) {
-    if (!code) {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const cookies = parseCookies(ctx.req)
+  const { code } = ctx.query as StripeRedirectQuery
+  if (!code) {
+    // if coming from login ui need to check if new user
+    try {
       const data = await fetchGetJSON(
-        `${get_URI(ctx)}/api/stripe/get-oauth-link?${new URLSearchParams({
-          uid,
+        `${getURI(ctx)}/api/connect/get-oauth-link?${new URLSearchParams({
+          uid: cookies.uid,
+          email: cookies.email,
         }).toString()}`
       )
       if (data.url) {
-        window.location = data.url
+        if (typeof window === 'undefined') {
+          // ctx.res.writeHead(307, { Location: data.url })
+          ctx.res.setHeader('Location', data.url)
+          ctx.res.statusCode = 307
+          ctx.res.end()
+        } else {
+          window.location = data.url
+        }
         return { props: {} }
       }
-    } else {
-      // if coming from stripe redirect after signing up, need to persist the stripeId into firebase
-      try {
-        const response = await fetchPostJSON(
-          `${get_URI(ctx)}/api/stripe/authorize-oauth`,
-          {
-            ...ctx.query,
-            code,
-            uid,
-          }
-        )
-        if (response.status !== 200) {
-          console.warn(response.message)
+    } catch (err) {
+      console.warn(err.message)
+    }
+  } else {
+    // if coming from stripe redirect after signing up, need to persist the stripeId into firebase
+    try {
+      const response = await fetchPostJSON(
+        `${getURI(ctx)}/api/connect/authorize-oauth`,
+        {
+          code,
+          uid: cookies.uid,
         }
-      } catch (err) {
-        if (err && err.response) {
-          console.warn(err.response)
-        }
+      )
+      if (response.status !== 200) {
+        console.warn(response.message)
+      }
+    } catch (err) {
+      if (err && err.response) {
+        console.warn(err.response)
       }
     }
   }
+
+  return { props: {} }
+
+  /*
+  
+    if (uid) {
+
   // redirect home if users manually requested this route
-  const redirect = '/'
+  const redirect = '/login'
   if (typeof window === 'undefined') {
     ctx.res.writeHead(301, { Location: redirect })
     ctx.res.end()
@@ -107,4 +78,5 @@ export const getServerSideProps: void = async (
     Router.replace(redirect)
   }
   return { props: {} }
+  */
 }
