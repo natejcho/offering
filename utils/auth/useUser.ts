@@ -5,7 +5,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import initFirebase from './initFirebase'
 
-initFirebase()
+// initFirebase()
 
 const useUser = () => {
   const [user, setUser] = useState()

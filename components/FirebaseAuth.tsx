@@ -1,14 +1,15 @@
 /* globals window */
 import { useEffect, useState } from 'react'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import firebase from 'firebase/app'
+import firebase from '../firebase/clientApp'
 import 'firebase/auth'
-import cookie from 'js-cookie'
-import initFirebase from '../utils/auth/initFirebase'
-import { fetchGetJSON } from '../utils/api-helpers'
+import Cookies from 'js-cookie'
+import Router from 'next/router'
+// import initFirebase from '../utils/auth/initFirebase'
+// import { fetchGetJSON } from '../utils/api-helpers'
 
 // Init the Firebase app.
-initFirebase()
+// initFirebase()
 
 const firebaseAuthConfig = {
   signInFlow: 'popup',
@@ -27,29 +28,17 @@ const firebaseAuthConfig = {
       // xa is the access token, which can be retrieved through
       // firebase.auth().currentUser.getIdToken()
       const { uid, email, xa } = user
-      const userData = {
-        id: uid,
-        email,
-        token: xa,
-      }
-
-      //TODO: kind of convoluted way of sending email as param
-      const args = new URLSearchParams({ email })
-
-      const data = await fetchGetJSON(
-        `/api/stripe/connect/get-oauth-link?${args.toString()}`
-      )
-
-      cookie.set('auth', userData, {
-        expires: 1,
-      }) // signup vs sign in
-      if (data.url) {
-        window.location = data.url
-
+      if (uid) {
+        const userData = {
+          id: uid,
+          email,
+          token: xa,
+        }
+        Cookies.set('auth', userData, {
+          expires: 3,
+        })
+        Router.push('/auth?' + new URLSearchParams({ uid }).toString())
         return false
-      } else {
-        // elmButton.textContent = "<Something went wrong>";
-        console.log('data', data)
       }
     },
   },

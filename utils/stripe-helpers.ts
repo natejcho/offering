@@ -20,8 +20,8 @@ export function formatAmountForStripe(
     currencyDisplay: 'symbol',
   })
   const parts = numberFormat.formatToParts(amount)
-  let zeroDecimalCurrency: boolean = true
-  for (let part of parts) {
+  let zeroDecimalCurrency = true
+  for (const part of parts) {
     if (part.type === 'decimal') {
       zeroDecimalCurrency = false
     }

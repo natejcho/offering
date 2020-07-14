@@ -12,7 +12,7 @@ const Header = ({ title }: Props) => {
   const handleLogin = async () => {
     setDisabled(true)
 
-    const data = await fetchGetJSON('/api/stripe/connect/get-oauth-link')
+    const data = await fetchGetJSON('/api/stripe/get-oauth-link')
     if (data.url) {
       window.location = data.url
     } else {

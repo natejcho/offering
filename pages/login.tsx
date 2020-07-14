@@ -1,6 +1,6 @@
 import FirebaseAuth from '../components/FirebaseAuth'
 
-const TempAuth = () => {
+const Login = () => {
   return (
     <div>
       <p>Sign in</p>
@@ -11,4 +11,4 @@ const TempAuth = () => {
   )
 }
 
-export default TempAuth
+export default Login

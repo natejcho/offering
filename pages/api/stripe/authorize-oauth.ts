@@ -1,19 +1,21 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+import firebase from '../../../firebase/clientApp';
 
 interface RequestQuery {
   code: string,
   state: string,
+  uid: string,
 }
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === 'GET') {
-    const { code, state }: RequestQuery = req.query as RequestQuery;
+  if (req.method === 'POST') {
+    const { code, state, uid } = req.query as RequestQuery;
     try {
-      // Assert the state matches the state you provided in the OAuth link (optional).
+      // TODO: before delete - Assert the state matches the state you provided in the OAuth link (optional).
       // if (req.session.state !== state) {
       //   return res.status(403).json({ error: 'Incorrect state parameter: ' + state });
       // }
@@ -24,7 +26,7 @@ export default async function handler(
         grant_type: 'authorization_code',
         code
       })
-      saveAccountId(response.stripe_user_id);
+      await saveStripeId(response.stripe_user_id, uid);
 
       // Render some HTML or redirect to a different page.
       // res.redirect(301, '/success.html')
@@ -37,12 +39,19 @@ export default async function handler(
       }
     }
   } else {
-    res.setHeader('Allow', 'GET')
+    res.setHeader('Allow', 'POST')
     res.status(405).end('Method Not Allowed')
   }
 }
 
-function saveAccountId(id: string) {
+async function saveStripeId(stripeId: string, uid: string) {
+  try {
+    await firebase.firestore().doc(`users/${uid}`).set({
+      stripeId,
+    }, { merge: true })
+  } catch (err) {
+    throw new Error(err.message);
+  }
   // Save the connected account ID from the response to your database.
-  console.log('Connected account ID: ' + id);
+  // console.log('Connected account ID: ' + stripeId);
 }
