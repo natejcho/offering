@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import Router from 'next/router'
 import firebase, { init } from '../firebase'
 
 init()
@@ -15,21 +14,8 @@ const firebaseAuthConfig = {
       requireDisplayName: false,
     },
   ],
-  signInSuccessUrl: '/',
+  signInSuccessUrl: '/auth',
   credentialHelper: 'none',
-  callbacks: {
-    signInSuccessWithAuthResult: async ({ user }) => {
-      // xa is the access token, which can be retrieved through
-      // firebase.auth().currentUser.getIdToken()
-      //TODO: handle firebase signups bc this will be null;
-      console.log(user)
-      const { uid } = user
-      if (uid) {
-        Router.push('/auth?' + new URLSearchParams({ uid }).toString())
-        return false
-      }
-    },
-  },
 }
 
 const FirebaseAuth = () => {

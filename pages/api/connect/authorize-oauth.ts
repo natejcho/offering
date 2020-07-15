@@ -14,13 +14,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log('api/connect/authorize-oauth')
-
   if (req.method === 'POST') {
     const {
       code,
       // state,
       uid,
+      email,
     } = req.body as RequestQuery
     try {
       // TODO: before delete - Assert the state matches the state you provided in the OAuth link (optional).
@@ -28,16 +27,13 @@ export default async function handler(
       //   return res.status(403).json({ error: 'Incorrect state parameter: ' + state });
       // }
 
-      console.log('code')
-      console.log(code)
-      console.log(!code)
       // Send the authorization code to Stripe's API.
       const response = await stripe.oauth.token({
         // eslint-disable-next-line @typescript-eslint/camelcase
         grant_type: 'authorization_code',
         code,
       })
-      await saveStripeId(response.stripe_user_id, uid)
+      await saveStripeId(response.stripe_user_id, uid, email)
 
       // Render some HTML or redirect to a different page.
       // res.redirect(301, '/success.html')
@@ -46,7 +42,7 @@ export default async function handler(
       if (err.type === 'StripeInvalidGrantError') {
         res.status(400).json({ error: 'Invalid authorization code: ' + code })
       } else {
-        res.status(500).json({ statusCode: 500, message: err.message })
+        res.status(500).json({ statusCode: 500, error: err.message })
       }
     }
   } else {
@@ -55,12 +51,12 @@ export default async function handler(
   }
 }
 
-async function saveStripeId(stripeId: string, uid: string) {
-  console.log('save stripe id')
+async function saveStripeId(stripeId: string, uid: string, email: string) {
   try {
     await firebase.firestore().doc(`users/${uid}`).set(
       {
         stripeId,
+        email,
       },
       { merge: true }
     )

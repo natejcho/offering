@@ -13,7 +13,7 @@ export default async function handler(
       const doc = await firebase.firestore().doc(`users/${req.query.uid}`).get()
       if (!doc.exists || !doc.data()?.stripeId) {
         const state = uuidv4()
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/camelcase
+        /* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/camelcase */
         const args = new URLSearchParams({
           state,
           client_id: process.env.STRIPE_CLIENT_ID!,

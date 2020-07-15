@@ -1,15 +1,13 @@
 import { useState, useEffect, createContext, useContext } from 'react'
 import Cookies from 'js-cookie'
+import Router from 'next/router'
 import firebase, { init } from '../firebase'
 
 init()
 
-import { useRouter } from 'next/router'
-
 export const UserContext = createContext()
 
 export default function UserContextComp({ children }) {
-  const router = useRouter()
   const [user, setUser] = useState(null)
   const [loadingUser, setLoadingUser] = useState(true) // Helpful, to update the UI accordingly.
 
@@ -22,8 +20,8 @@ export default function UserContextComp({ children }) {
           const userData = {
             uid: user.uid,
             email: user.email,
-            displayName: user.displayName,
-            token: firebase.auth().currentUser.getIdToken(),
+            // displayName: user.displayName,
+            // token: firebase.auth().currentUser.getIdToken(),
           }
           // TODO: save as one cookie but need to parse
           Object.entries(userData).forEach((cookie) => {
@@ -37,6 +35,7 @@ export default function UserContextComp({ children }) {
         } else setUser(null)
       } catch (error) {
         // Most probably a connection error. Handle appropriately.
+        console.warn(error.message)
       } finally {
         setLoadingUser(false)
       }
@@ -52,9 +51,10 @@ export default function UserContextComp({ children }) {
       .signOut()
       .then(() => {
         // Sign-out successful.
-        Cookies.remove('auth')
+        Cookies.remove('uid')
+        Cookies.remove('email')
+        Router.reload(window.location.pathname)
         setUser(null)
-        router.push('/auth')
       })
       .catch((e) => {
         console.error(e)

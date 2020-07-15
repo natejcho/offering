@@ -6,17 +6,22 @@ import {
   parseCookies,
 } from '../utils/api-helpers'
 import { ParsedUrlQuery } from 'querystring'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 interface StripeRedirectQuery extends ParsedUrlQuery {
   code: string
 }
 
 const Auth = () => {
-  return
+  const router = useRouter()
+  useEffect(() => {
+    router.replace('/')
+  }, [])
+  return <div></div>
 }
 
-export default Auth
-
+// Auth.getInitialProps = async ctx => {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const cookies = parseCookies(ctx.req)
   const { code } = ctx.query as StripeRedirectQuery
@@ -51,10 +56,11 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         {
           code,
           uid: cookies.uid,
+          email: cookies.email,
         }
       )
       if (response.status !== 200) {
-        console.warn(response.message)
+        console.warn(response.error)
       }
     } catch (err) {
       if (err && err.response) {
@@ -80,3 +86,5 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   return { props: {} }
   */
 }
+
+export default Auth
