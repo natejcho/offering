@@ -32,6 +32,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         `${getURI(ctx)}/api/connect/get-oauth-link?${new URLSearchParams({
           uid: cookies.uid,
           email: cookies.email,
+          // businessName:
         }).toString()}`
       )
       if (data.url) {

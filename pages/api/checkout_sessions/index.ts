@@ -62,7 +62,7 @@ export default async function handler(
   }
 }
 
-// Take a 10% cut.
+// TODO: get a deal
 function calculateApplicationFeeAmount(basePrice) {
-  return 0.1 * basePrice
+  return 0.03 * basePrice + 0.39
 }

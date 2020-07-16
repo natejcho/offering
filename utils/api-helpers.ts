@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-unfetch'
 import cookie from 'cookie'
 
-// TODO: delete
+// TODO: replace with axios
 export async function fetchGetJSON(url: string) {
   try {
     const data = await fetch(url).then((res) => res.json())
