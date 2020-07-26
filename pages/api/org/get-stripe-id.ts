@@ -8,14 +8,13 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === 'GET') {
-    const tinyId = req.query
+    const { tinyId } = req.query
     try {
-      const doc = await firebase.firestore().doc(`users/${req.query.uid}`).get()
-      if (doc.exists && doc.data()?.stripeId) {
-        res.status(200).json({ stripeId: doc.data()?.stripeId })
-      } else {
+      const doc = await firebase.firestore().doc(`tinyId/${tinyId}`).get()
+      if (!doc.exists || !doc.data()?.stripeId) {
         res.status(404).end('Organization Not Found for tiny Id: ' + tinyId)
       }
+      res.status(200).json({ stripeId: doc.data()?.stripeId })
     } catch (err) {
       res.status(500).json({ statusCode: 500, message: err.message })
     }

@@ -1,17 +1,8 @@
 import { NextPage } from 'next'
 import Layout from '../components/Layout'
-import CheckoutForm from '../components/CheckoutForm'
 
 const IndexPage: NextPage = () => {
-  return (
-    <Layout>
-      <ul className="card-list">
-        <li>
-          <CheckoutForm />
-        </li>
-      </ul>
-    </Layout>
-  )
+  return <Layout></Layout>
 }
 
 export default IndexPage

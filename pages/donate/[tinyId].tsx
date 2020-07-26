@@ -28,10 +28,12 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
           tinyId,
         }).toString()}`
       )
-      return {
-        props: {
-          stripeId: data.stripeId,
-        },
+      if (data.stripeId) {
+        return {
+          props: {
+            stripeId: data.stripeId,
+          },
+        }
       }
     } catch (err) {
       console.warn(err.message)
