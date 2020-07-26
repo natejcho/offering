@@ -8,6 +8,7 @@ interface RequestQuery {
   code: string
   state: string
   uid: string
+  email: string
 }
 
 export default async function handler(

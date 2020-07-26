@@ -11,7 +11,11 @@ interface FormData {
   amount: number
 }
 
-const CheckoutForm = () => {
+interface FormProps {
+  destination: string
+}
+
+const CheckoutForm = (props: FormProps) => {
   const {
     register,
     handleSubmit,
@@ -27,7 +31,7 @@ const CheckoutForm = () => {
     try {
       const response = await fetchPostJSON('/api/checkout_sessions', {
         amount: data.amount,
-        destination: 'acct_1H510xGuEh3TRDoE',
+        destination: props.destination,
       })
       // const response = await apiClient.post<FormData>('/api/checkout_sessions');
 

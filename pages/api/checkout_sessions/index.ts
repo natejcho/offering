@@ -25,6 +25,10 @@ export default async function handler(
         throw new Error('Invalid amount.')
       }
       const basePrice = formatAmountForStripe(amount, CURRENCY)
+      const appFee = formatAmountForStripe(
+        calculateApplicationFeeAmount(amount),
+        CURRENCY
+      )
       // Create Checkout Sessions from body params.
       const params: Stripe.Checkout.SessionCreateParams = {
         /* eslint-disable  @typescript-eslint/camelcase */
@@ -39,7 +43,7 @@ export default async function handler(
           },
         ],
         payment_intent_data: {
-          application_fee_amount: calculateApplicationFeeAmount(basePrice),
+          application_fee_amount: appFee,
           // The account receiving the funds, as passed from the client.
           transfer_data: {
             destination,
@@ -62,7 +66,7 @@ export default async function handler(
   }
 }
 
-// Take a 10% cut.
+// TODO: get a deal
 function calculateApplicationFeeAmount(basePrice) {
-  return 0.1 * basePrice
+  return 0.0299 * basePrice + 0.309
 }
